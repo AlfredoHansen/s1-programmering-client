@@ -9,48 +9,71 @@
 <body>
 
     <h1>Alle produkter</h1>
-    <select>
+    <select id="category-list">
         <option>Alle produkter</option>
         <option>Tøj</option>
         <option>Møbler</option>
         <option>Bildele</option>
     </select>
+
     <ul id="list-of-products">
     </ul>
 
     <script>
         
-        //Lav et nyt request
-        const request = new XMLHttpRequest();
+        let category = document.getElementById('category-list');
+        category.addEventListener("change", () => {
 
-        //Skriv hvilke endpoint det skal hente fra
-        const url = 'http://localhost:3000/api/products';
+            if(category.value == 'Alle produkter') {
+                getProducts();
+            } else {
+                getProducts(category.value);
+            }
 
-        //Åben forbindelsen til serveren ud fra vores url (endpoint)
-        request.open("GET", url);
+        });
 
-        //Send request til server
-        request.send();
+        function getProducts(categoryValue) {
 
-        request.onload = (e) => {
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
 
-            //Tag response fra vores server, og lav det om til et Javascript object
-            var products = JSON.parse(request.response);
+            //Skriv hvilke endpoint det skal hente fra
+            var url = 'http://localhost:3000/api/products';
 
-            //Udskriv data fra server
-            console.log(products)
+            if(categoryValue) {
+                url = 'http://localhost:3000/api/products?category='+categoryValue;
+            }
 
-            //Ny var
-            var newListOfProcuctsHTML = '';
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
 
-            //Loop over alle vores users fra vores response
-            products.forEach(product => {
-                newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+'</li>';
-            });
+            //Send request til server
+            request.send();
 
-            document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
+            request.onload = (e) => {
 
+                //Tag response fra vores server, og lav det om til et Javascript object
+                var products = JSON.parse(request.response);
+
+                //Udskriv data fra server
+                console.log(products)
+
+                //Ny var
+                var newListOfProcuctsHTML = '';
+
+                //Loop over alle vores users fra vores response
+                products.forEach(product => {
+                    newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+'</li>';
+                });
+
+                document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
+
+            }
         }
+
+        getProducts();
+
+
     </script>
 
 </body>
