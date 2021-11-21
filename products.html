@@ -7,6 +7,51 @@
     <title>Alle produkter</title>
 </head>
 <body>
-    
+
+    <h1>Alle produkter</h1>
+    <select>
+        <option>Alle produkter</option>
+        <option>Tøj</option>
+        <option>Møbler</option>
+        <option>Bildele</option>
+    </select>
+    <ul id="list-of-products">
+    </ul>
+
+    <script>
+        
+        //Lav et nyt request
+        const request = new XMLHttpRequest();
+
+        //Skriv hvilke endpoint det skal hente fra
+        const url = 'http://localhost:3000/api/products';
+
+        //Åben forbindelsen til serveren ud fra vores url (endpoint)
+        request.open("GET", url);
+
+        //Send request til server
+        request.send();
+
+        request.onload = (e) => {
+
+            //Tag response fra vores server, og lav det om til et Javascript object
+            var products = JSON.parse(request.response);
+
+            //Udskriv data fra server
+            console.log(products)
+
+            //Ny var
+            var newListOfProcuctsHTML = '';
+
+            //Loop over alle vores users fra vores response
+            products.forEach(product => {
+                newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+'</li>';
+            });
+
+            document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
+
+        }
+    </script>
+
 </body>
 </html>
