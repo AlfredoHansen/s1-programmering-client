@@ -9,11 +9,20 @@
 <body>
 
     <h1>Alle produkter</h1>
+    <h2>Herunder finder du en liste af produkter</h2>
+    Ellers kan du oprette et nyt produkt <a href="products-create.html">her</a>
+    <br>
+    <br>
     <select id="category-list">
-        <option>Alle produkter</option>
         <option>Tøj</option>
         <option>Møbler</option>
         <option>Bildele</option>
+        <option>Køkkenudstyr</option>
+        <option>Haveudstyr</option>
+        <option>Legetøj</option>
+        <option>Belysning</option>
+        <option>Accessories</option>
+        <option>Teknologi</option>
     </select>
 
     <ul id="list-of-products">
@@ -31,7 +40,7 @@
             }
 
         });
-
+        
         function getProducts(categoryValue) {
 
             //Lav et nyt request
@@ -63,7 +72,8 @@
 
                 //Loop over alle vores users fra vores response
                 products.forEach(product => {
-                    newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+'</li>';
+                    var productId = product.id;
+                    newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+' - '+product.id+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button>';
                 });
 
                 document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
@@ -73,6 +83,29 @@
 
         getProducts();
 
+        function deleteProductWithId(id) {
+            console.log(id);
+        //Lav et nyt request
+         const request = new XMLHttpRequest();
+    
+        //Skriv hvilke endpoint det skal hente fra
+        const url = 'http://localhost:3000/api/products/delete?id='+id;
+
+        //Åben forbindelsen til serveren ud fra vores url (endpoint)
+        request.open("GET", url);
+
+
+        //Send request til server
+        request.send();
+
+
+        request.onload = (e) => {
+        getProducts();
+    }
+
+        }
+        
+        
 
     </script>
 
