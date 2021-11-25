@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret produkt</title>
+</head>
+<body>
+    <h1>Opret nyt produkt</h1>
+  
+    Du kommer tilbage til prdukter <a href="products.html">her</a>
+    <br><br>
+    Produktetnavn: <br>
+    <input name="title" id="title" style="width: 200px;" placeholder="Skriv produktets navn her"/>
+    <br /><br />
+    Produktbeskrivelse: <br>
+    <input name="description" id="description" style="width: 200px;" placeholder="Skriv beskrivelse af produktet her"/><br /><br />
+    
+    Produktpris: <br>
+    <input name="price" id="price" style="width: 200px;" placeholder="Skriv produktets pris her"/><br /><br />
+
+    Produktkategori: <br>
+    <select id="category">
+        <option>Tøj</option>
+        <option>Møbler</option>
+        <option>Bildele</option>
+        <option>Køkkenudstyr</option>
+        <option>Haveudstyr</option>
+        <option>Legetøj</option>
+        <option>Belysning</option>
+        <option>Accessories</option>
+        <option>Teknologi</option>
+    </select>
+    <br /><br />
+    <button onclick="sendNewProductData()">
+        Opret produkt
+    </button>
+
+    <script>
+        function sendNewProductData() {
+    
+            //Hent title fra input felt id="title"
+            var title = document.getElementById('title').value;
+    
+            //Hent description fra input felt id="description"
+            var description = document.getElementById('description').value;
+
+            //Hent price fra input felt id="price"
+            var price = document.getElementById('price').value;
+
+            //Hent category fra input felt id="category"
+            var category = document.getElementById('category').value;
+    
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
+    
+            //Skriv hvilke endpoint det skal hente fra
+            const url = 'http://localhost:3000/api/products/create?title='+title+'&description='+description+'&price='+price+'&category='+category;
+    
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+    
+    
+            //Send request til server
+            request.send(sendNewProductData);
+
+    
+            request.onload = (e) => {
+                alert('Du har nu oprettet et produkt')
+            }
+            
+    
+    
+        }
+        </script>
+        
+
+</body>
+</html>
