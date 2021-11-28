@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rediger produkt</title>
+</head>
+<body>
+    <h1>Rediger produkt</h1>
+  
+    Du kommer tilbage til prdukter <a href="products.html">her</a>
+    <br><br>
+    Produktetnavn: <br>
+    <input name="title" id="title" style="width: 200px;" placeholder="Skriv produktets navn her"/>
+    <br /><br />
+    Produktbeskrivelse: <br>
+    <input name="description" id="description" style="width: 200px;" placeholder="Skriv beskrivelse af produktet her"/><br /><br />
+    
+    Produktpris: <br>
+    <input name="price" id="price" style="width: 200px;" placeholder="Skriv produktets pris her"/><br /><br />
+
+    <input type="hidden" name="id" id="id">
+
+    Produktkategori: <br>
+    <select id="category">
+        <option>Tøj</option>
+        <option>Møbler</option>
+        <option>Bildele</option>
+        <option>Køkkenudstyr</option>
+        <option>Haveudstyr</option>
+        <option>Legetøj</option>
+        <option>Belysning</option>
+        <option>Accessories</option>
+        <option>Teknologi</option>
+    </select>
+    <br /><br />
+    <button onclick="sendNewProductData()">
+        Opdater produkt
+    </button>
+
+    <script>
+
+    //Vi laver en function med navnet getURLData
+       function getURLData() {
+        //Inde i funktionen bruger vi URLSearchParams som er en API metode hvorpå vi får adgang til 'values' i vores query strings. I vores tilfælde kan det for eksempel være id'et og vil altid stå efter '?''
+        const params = new URLSearchParams(window.location.search)
+
+        // Her tester vi om vi får fat i vores value i vores params
+        console.log(params);
+        
+        // Her får vi fat i det pågældende query string value. Altså i dette tilfælde title som vi skal bruge for at kunne redigere
+        var title = params.get('title')
+        console.log(title);
+        document.getElementById('title').value = title;
+
+        var description = params.get('description')
+        console.log(description);
+        document.getElementById('description').value = description;
+
+        var price = params.get('price')
+        console.log(price);
+        document.getElementById('price').value = price;
+
+        var category = params.get('category')
+        console.log(category);
+        document.getElementById('category').value = category;
+
+        var id = params.get('id')
+        console.log(id);
+        document.getElementById('id').value = id;
+
+       }
+    getURLData();
+
+    //Definer sendNewProductData
+    function sendNewProductData() {
+    
+    //Hent title fra input felt id="title"
+    var title = document.getElementById('title').value;
+
+    //Hent description fra input felt id="description"
+    var description = document.getElementById('description').value;
+
+    //Hent price fra input felt id="price"
+    var price = document.getElementById('price').value;
+
+    //Hent category fra input felt id="category"
+    var category = document.getElementById('category').value;
+
+    // hent id fra intut felt id="id"
+    var id = document.getElementById('id').value;
+
+    //Lav et nyt request
+    const request = new XMLHttpRequest();
+
+    //Skriv hvilke endpoint det skal hente fra
+    const url = 'http://localhost:3000/api/products/edit?title='+title+'&description='+description+'&price='+price+'&category='+category+'&id='+id;
+
+    //Åben forbindelsen til serveren ud fra vores url (endpoint)
+    request.open("GET", url);
+
+
+    //Send request til server
+    request.send(sendNewProductData);
+
+    //Giv klienten besked om at deres redigering af produktet er fuldført
+    request.onload = (e) => {
+        alert('Du har nu redigeret et produkt')
+    }
+    
+}
+   
+    </script>
+        
+
+</body>
+</html>
