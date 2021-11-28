@@ -14,6 +14,7 @@
     <br>
     <br>
     <select id="category-list">
+        <option>Alle produkter</option>
         <option>Tøj</option>
         <option>Møbler</option>
         <option>Bildele</option>
@@ -70,10 +71,10 @@
                 //Ny var
                 var newListOfProcuctsHTML = '';
 
-                //Loop over alle vores users fra vores response
+                //Loop over alle vores products fra vores response
                 products.forEach(product => {
                     var productId = product.id;
-                    newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+' - '+product.id+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button>';
+                    newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+' - '+product.id+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button> - <a href="products-edit.html?title='+product.title+'&id='+product.id+'&description='+product.description+'&price='+product.price+'&category='+product.category+'">Rediger produkt</a>';
                 });
 
                 document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
@@ -102,11 +103,7 @@
         request.onload = (e) => {
         getProducts();
     }
-
         }
-        
-        
-
     </script>
 
 </body>
