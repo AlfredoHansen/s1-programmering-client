@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Log ind</h1>
+
+    Emailadresse: <br>
+    <input name="email" id="email" style="width: 200px;" placeholder="Skriv din emailadresse her"/>
+    <br /><br />
+    Password: <br>
+    <input name="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br /><br />
+        <button onclick="sendNewLoginData()">
+            log ind
+        </button>
+    
+    <script>
+        //Definer sendNewUserData
+       function sendNewLoginData() {
+
+        //Hent email fra input felt id="email"
+        var email = document.getElementById('email').value;
+
+        //Hent password fra input felt id="password"
+        var password = document.getElementById('password').value;
+
+       //Lav et nyt request
+       const request = new XMLHttpRequest();
+
+       //Skriv hvilke endpoint det skal hente fra
+       const url = 'http://localhost:3000/api/users/login?email='+email+'&password='+password;
+
+       //Åben forbindelsen til serveren ud fra vores url (endpoint)
+       request.open("GET", url);
+
+
+       //Send request til server
+       request.send();
+
+       //Giv klienten besked om at deres redigering af produktet er fuldført
+       request.onload = (e) => {
+           if(JSON.parse(request.response).name){
+               var user = JSON.parse(request.response);
+               console.log(user);
+               //Her skal jeg finde ud af at sætte en cookie og gemme user objektet i                               mm
+               location.href = 'products.html';
+           } else{
+               alert('Ingen bruger fundet');
+           }
+        
+         
+       }
+   }
+  
+       </script>
+</body>
+</html>
+// TIlføj knap 
+// send data til endpoint, ligesom i create
+//  const request = new XMLHttpRequest();   tjek response fra endpoint. om dert er en bruger eller ej 
