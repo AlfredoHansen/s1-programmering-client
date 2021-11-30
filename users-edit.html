@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>users-edit</title>
+</head>
+<body>
+    <h1>Opdater bruger</h1>
+
+    Du kan gå tilbage til din profil <a href="users-profile.html">her</a> <br> <br>
+    
+    Dit fulde navn: <br>
+    <input name="name" id="name" style="width: 200px;" placeholder="Skriv dit navn her"/><br /><br />
+    Din emailadresse:<br>
+    <input name="email" id="email" style="width: 200px;" placeholder="Skriv din email her"/><br /><br />
+    Dit password: <br>
+    <input password="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br><br>
+    <input type="hidden" name="userId" id="userId">
+
+    <button onclick="sendNewUserData()">
+        Opdater bruger
+    </button>
+    <br><br>
+    <button onclick="deleteUserWithThisId()">
+        Slet bruger
+    </button>
+
+    <script>
+        //Vi laver en function med navnet getURLData
+        function getURLData() {
+           // Her får vi fat i det pågældende query string value. Altså i dette tilfælde name som vi skal bruge for at kunne redigere i vores bruger
+            var name = localStorage.getItem('name');
+            document.getElementById('name').value = name;
+
+            var email = localStorage.getItem('email');
+            document.getElementById('email').value = email;
+
+            var password = localStorage.getItem('password');
+            document.getElementById('password').value = password;
+
+            var userId = localStorage.getItem("userId");
+       
+        }
+        getURLData();
+
+        //Definer sendNewUserData
+        function sendNewUserData() {
+            //Hent name fra input felt id="name"
+             var name = document.getElementById('name').value;
+             
+             //Hent email fra input felt id="email"
+             var email = document.getElementById('email').value;
+
+    //Hent password fra input felt id="password"
+    var password = document.getElementById('password').value;
+
+    var userId = localStorage.getItem("userId");
+
+    //Lav et nyt request
+    const request = new XMLHttpRequest();
+
+    //Skriv hvilke endpoint det skal hente fra
+    const url = 'http://localhost:3000/api/users/edit?name='+name+'&email='+email+'&password='+password+'&userId='+userId;
+
+    //Åben forbindelsen til serveren ud fra vores url (endpoint)
+    request.open("GET", url);
+
+    //Send request til server
+    request.send();
+
+    //Giv klienten besked om at deres redigering af produktet er fuldført
+    request.onload = (e) => {
+        alert('Du har nu redigeret din bruger')
+        localStorage.setItem("name", name);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("email", email);
+        localStorage.setItem("password", password);
+    }
+}
+    </script>
+    
+</body>
+</html>
