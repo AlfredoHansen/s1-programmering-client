@@ -8,11 +8,8 @@
 </head>
 <body>
 
-    <h1>Alle produkter</h1>
+    <h1 id="headline">Alle produkter</h1>
     <h2>Herunder finder du en liste af produkter</h2>
-    Ellers kan du oprette et nyt produkt <a href="products-create.html">her</a>
-    <br>
-    <br>
     <select id="category-list">
         <option>Alle produkter</option>
         <option>Tøj</option>
@@ -28,6 +25,10 @@
 
     <ul id="list-of-products">
     </ul>
+
+    kan logge ind eller oprette dig som bruger <a href="users-create.html">her</a><br>
+
+    <a id="MyPageButton" href="users-profile.html">Min side</a>
 
     <script>
         
@@ -74,7 +75,7 @@
                 //Loop over alle vores products fra vores response
                 products.forEach(product => {
                     var productId = product.id;
-                    newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+' - '+product.id+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button> - <a href="products-edit.html?title='+product.title+'&id='+product.id+'&description='+product.description+'&price='+product.price+'&category='+product.category+'">Rediger produkt</a>';
+                    newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category;
                 });
 
                 document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
@@ -83,6 +84,19 @@
         }
 
         getProducts();
+
+        function getUserData() {
+            var name = localStorage.getItem("name");
+            if(name){
+                document.getElementById("headline").innerHTML = 'Velkommen til ' + name;
+            }else{
+                document.getElementById("headline").innerHTML = 'Alle produkter';
+                document.getElementById("MyPageButton").style.visibility = "hidden";
+
+            }
+        }
+        getUserData();
+
 
         function deleteProductWithId(id) {
             console.log(id);
