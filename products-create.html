@@ -9,7 +9,7 @@
 <body>
     <h1>Opret nyt produkt</h1>
   
-    Du kommer tilbage til prdukter <a href="products.html">her</a>
+    Du kommer tilbage til produkter <a href="products.html">her</a>
     <br><br>
     Produktetnavn: <br>
     <input name="title" id="title" style="width: 200px;" placeholder="Skriv produktets navn her"/>
@@ -51,12 +51,14 @@
 
             //Hent category fra input felt id="category"
             var category = document.getElementById('category').value;
+
+            var userId = localStorage.getItem("userId");
     
             //Lav et nyt request
             const request = new XMLHttpRequest();
     
             //Skriv hvilke endpoint det skal hente fra
-            const url = 'http://localhost:3000/api/products/create?title='+title+'&description='+description+'&price='+price+'&category='+category;
+            const url = 'http://localhost:3000/api/products/create?title='+title+'&description='+description+'&price='+price+'&category='+category+'&userId='+userId;
     
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
             request.open("GET", url);
