@@ -9,34 +9,33 @@
 <body>
     <H1>Min Side</H1>
     Du kan se alle produkter der er tilsalg <a href="products.html">her</a> <br>
-    Ellers kan du oprette et nyt produkt <a href="products-create.html">her</a> <br><br>
-    <select id="category-list">
-        <option>Alle produkter</option>
-        <option>Tøj</option>
-        <option>Møbler</option>
-        <option>Bildele</option>
-        <option>Køkkenudstyr</option>
-        <option>Haveudstyr</option>
-        <option>Legetøj</option>
-        <option>Belysning</option>
-        <option>Accessories</option>
-        <option>Teknologi</option>
-    </select>
+    Ellers kan du oprette et nyt produkt <a href="products-create.html">her</a> <br>
 
+    <h2>Mine produkter:</h2>
     <ul id="list-of-products">
     </ul>
 
 <button onclick="LogOut()">
     Log ud
-</button>
+</button> <br> <br>
+Opdater din profil <a href="users-edit.html">her</a>
 <script>
+    //Laver en funktion til når man trykker på log ud knappen
     function LogOut() {
+
+        //fjerner navn fra localstorage
         localStorage.removeItem("name");
+
+        //fjerner userId fra localstorage
         localStorage.removeItem("userId");
+
+        //Viderestiller brugeren til startsiden uden længere at være logget ind
         location.href = 'products.html';
     };
 
     function userProducts(){
+
+        //Henter userId fra localStorage
         var userId = localStorage.getItem("userId");
 
         //Lav et nyt request
@@ -45,6 +44,7 @@
         //Skriv hvilke endpoint det skal hente fra
         var url = 'http://localhost:3000/api/users/profile';
 
+        //Hvis userId'et er det samme som pågældendes profil
         if(userId) {
         url = 'http://localhost:3000/api/users/profile?userId='+userId;
         }
@@ -56,29 +56,22 @@
         request.send();
 
         request.onload = (e) => {
+            //Tag response fra vores server, og lav det om til et Javascript object
+            var products = JSON.parse(request.response);
 
-        //Tag response fra vores server, og lav det om til et Javascript object
-        var products = JSON.parse(request.response);
+            //Ny var
+            var newListOfMyProcuctsHTML = '';
 
-        //Udskriv data fra server
-        console.log(products)
-
-        //Ny var
-         var newListOfMyProcuctsHTML = '';
-
-        //Loop over alle vores products fra vores response
-        products.forEach(product => {
-        var productId = product.userId;
-        newListOfMyProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+' - '+product.id+' - '+product.userId+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button> - <a href="products-edit.html?title='+product.title+'&id='+product.id+'&description='+product.description+'&price='+product.price+'&category='+product.category+'">Rediger produkt</a>';
-   
-        });
-        document.getElementById("list-of-products").innerHTML = newListOfMyProcuctsHTML;
-   
-    }       
-}
-
-userProducts();
-
+            //Loop over alle vores products fra vores response og se hvilke der matcher altså hvilke der skal vises på brugerens profil
+            products.forEach(product => {
+                var productId = product.userId;
+                newListOfMyProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+' - '+product.id+' - '+product.userId+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button> - <a href="products-edit.html?title='+product.title+'&id='+product.id+'&description='+product.description+'&price='+product.price+'&category='+product.category+'">Rediger produkt</a>';
+            });
+            document.getElementById("list-of-products").innerHTML = newListOfMyProcuctsHTML;
+        };       
+    };
+    //Her kører jeg funktionen
+    userProducts();
 </script>
 </body>
 </html>
