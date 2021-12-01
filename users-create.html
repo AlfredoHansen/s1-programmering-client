@@ -54,7 +54,8 @@
 
         //Giv klienten besked om at deres redigering af produktet er fuldført
         request.onload = (e) => {
-            alert('Du har nu oprettet en bruger')
+            //Direkte link til login efter man er oprettet
+            location.href = "users-login.html";
         }
     }
     
