@@ -52,6 +52,7 @@
             //Hent category fra input felt id="category"
             var category = document.getElementById('category').value;
 
+            //Hent userId fra localstorage
             var userId = localStorage.getItem("userId");
     
             //Lav et nyt request
@@ -63,20 +64,14 @@
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
             request.open("GET", url);
     
-    
             //Send request til server
             request.send(sendNewProductData);
 
-    
+            //Produktet er gemt og du bliver viderestillet tilbage til "Min Side"
             request.onload = (e) => {
-                alert('Du har nu oprettet et produkt')
-            }
-            
-    
-    
+                location.href = "users-profile.html";
+            };
         }
         </script>
-        
-
 </body>
 </html>
