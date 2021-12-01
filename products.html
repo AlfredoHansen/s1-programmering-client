@@ -31,16 +31,14 @@
     <a id="MyPageButton" href="users-profile.html">Min side</a>
 
     <script>
-        
+        //Hvis der ikke bliver valgt en kategori, så vis alle produkter
         let category = document.getElementById('category-list');
         category.addEventListener("change", () => {
-
             if(category.value == 'Alle produkter') {
                 getProducts();
             } else {
                 getProducts(category.value);
             }
-
         });
         
         function getProducts(categoryValue) {
@@ -51,6 +49,7 @@
             //Skriv hvilke endpoint det skal hente fra
             var url = 'http://localhost:3000/api/products';
 
+            //Hvilket det skal hente fra hvis man vælger en kategori
             if(categoryValue) {
                 url = 'http://localhost:3000/api/products?category='+categoryValue;
             }
@@ -66,9 +65,6 @@
                 //Tag response fra vores server, og lav det om til et Javascript object
                 var products = JSON.parse(request.response);
 
-                //Udskriv data fra server
-                console.log(products)
-
                 //Ny var
                 var newListOfProcuctsHTML = '';
 
@@ -77,14 +73,13 @@
                     var productId = product.id;
                     newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category;
                 });
-
                 document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
-
-            }
-        }
-
+            };
+        };
+        //Her kører vi funktionen
         getProducts();
 
+        //Hent navn ud fra localstorage, så når man logger ind bliver det mere personligt ved at tilføje det i overskriften.
         function getUserData() {
             var name = localStorage.getItem("name");
             if(name){
@@ -92,32 +87,30 @@
             }else{
                 document.getElementById("headline").innerHTML = 'Alle produkter';
                 document.getElementById("MyPageButton").style.visibility = "hidden";
-
-            }
-        }
+            };
+        };
+        //Her kører jeg funktionen
         getUserData();
 
 
         function deleteProductWithId(id) {
-            console.log(id);
-        //Lav et nyt request
-         const request = new XMLHttpRequest();
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
     
-        //Skriv hvilke endpoint det skal hente fra
-        const url = 'http://localhost:3000/api/products/delete?id='+id;
+            //Skriv hvilke endpoint det skal hente fra
+            const url = 'http://localhost:3000/api/products/delete?id='+id;
 
-        //Åben forbindelsen til serveren ud fra vores url (endpoint)
-        request.open("GET", url);
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+            
+            //Send request til server
+            request.send();
 
-
-        //Send request til server
-        request.send();
-
-
-        request.onload = (e) => {
-        getProducts();
-    }
-        }
+            //produktet er slettet og du henter produkter
+            request.onload = (e) => {
+                getProducts();
+            };
+        };
     </script>
 
 </body>
