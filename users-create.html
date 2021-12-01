@@ -13,10 +13,13 @@
     
     Dit fulde navn: <br>
     <input name="name" id="name" style="width: 200px;" placeholder="Skriv dit navn her"/><br /><br />
+
     Din emailadresse:<br>
     <input name="email" id="email" style="width: 200px;" placeholder="Skriv din email her"/><br /><br />
+
     Dit password: <br>
     <input password="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br><br>
+
     <input type="hidden" name="id" id="id">
 
     <button onclick="sendNewUserData()">
@@ -27,38 +30,35 @@
     Hvis du allerede har en bruger kan du logge ind <a href="users-login.html">her</a>
     
     <script>
-         //Definer sendNewUserData
+        //Definer sendNewUserData
         function sendNewUserData() {
-    
-        //Hent name fra input felt id="name"
-         var name = document.getElementById('name').value;
+            
+            //Hent name fra input felt id="name"
+            var name = document.getElementById('name').value;
 
-         //Hent email fra input felt id="email"
-         var email = document.getElementById('email').value;
+            //Hent email fra input felt id="email"
+            var email = document.getElementById('email').value;
 
-         //Hent password fra input felt id="password"
-         var password = document.getElementById('password').value;
+            //Hent password fra input felt id="password"
+            var password = document.getElementById('password').value;
 
-        //Lav et nyt request
-        const request = new XMLHttpRequest();
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
 
-        //Skriv hvilke endpoint det skal hente fra
-        const url = 'http://localhost:3000/api/users/create?name='+name+'&email='+email+'&password='+password;
+            //Skriv hvilke endpoint det skal hente fra
+            const url = 'http://localhost:3000/api/users/create?name='+name+'&email='+email+'&password='+password;
 
-        //Åben forbindelsen til serveren ud fra vores url (endpoint)
-        request.open("GET", url);
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
 
+            //Send request til server
+            request.send();
 
-        //Send request til server
-        request.send();
-
-        //Giv klienten besked om at deres redigering af produktet er fuldført
-        request.onload = (e) => {
             //Direkte link til login efter man er oprettet
-            location.href = "users-login.html";
-        }
-    }
-    
+            request.onload = (e) => {
+                location.href = "users-login.html";
+            };
+        ;}
         </script>
 </body>
 </html>
