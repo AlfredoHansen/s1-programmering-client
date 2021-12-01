@@ -9,7 +9,7 @@
 <body>
     <h1>Rediger produkt</h1>
   
-    Du kommer tilbage til prdukter <a href="products.html">her</a>
+    Du kommer tilbage til produkter <a href="products.html">her</a>
     <br><br>
     Produktetnavn: <br>
     <input name="title" id="title" style="width: 200px;" placeholder="Skriv produktets navn her"/>
@@ -35,82 +35,84 @@
         <option>Teknologi</option>
     </select>
     <br /><br />
+
     <button onclick="sendNewProductData()">
         Opdater produkt
     </button>
 
     <script>
 
-    //Vi laver en function med navnet getURLData
-       function getURLData() {
-        //Inde i funktionen bruger vi URLSearchParams som er en API metode hvorpå vi får adgang til 'values' i vores query strings. I vores tilfælde kan det for eksempel være id'et og vil altid stå efter '?''
-        const params = new URLSearchParams(window.location.search)
+        //Vi laver en function med navnet getURLData
+        function getURLData() {
 
-        // Her tester vi om vi får fat i vores value i vores params
-        console.log(params);
+            //Inde i funktionen bruger vi URLSearchParams som er en API metode hvorpå vi får adgang til 'values' i vores query strings. I vores tilfælde kan det for eksempel være id'et
+            const params = new URLSearchParams(window.location.search)
+
+            // Her tester vi om vi får fat i vores value i vores params
+            console.log(params);
         
-        // Her får vi fat i det pågældende query string value. Altså i dette tilfælde title som vi skal bruge for at kunne redigere
-        var title = params.get('title')
-        console.log(title);
-        document.getElementById('title').value = title;
+            // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "title" som vi skal bruge for at kunne redigere
+            var title = params.get('title')
+            document.getElementById('title').value = title;
 
-        var description = params.get('description')
-        console.log(description);
-        document.getElementById('description').value = description;
+            // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "description" som vi skal bruge for at kunne redigere
+            var description = params.get('description')
+            document.getElementById('description').value = description;
 
-        var price = params.get('price')
-        console.log(price);
-        document.getElementById('price').value = price;
+            // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "price" som vi skal bruge for at kunne redigere
+            var price = params.get('price')
+            document.getElementById('price').value = price;
 
-        var category = params.get('category')
-        console.log(category);
-        document.getElementById('category').value = category;
+            // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "category" som vi skal bruge for at kunne redigere
+            var category = params.get('category')
+            document.getElementById('category').value = category;
+            
+            // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "id" som vi skal bruge for at kunne redigere
+            var id = params.get('id')
+            document.getElementById('id').value = id;
+        };
+        //Her kører vi funktionen
+        getURLData();
 
-        var id = params.get('id')
-        console.log(id);
-        document.getElementById('id').value = id;
+        //Definer sendNewProductData
+        function sendNewProductData() {
+            
+            //Hent title fra input felt id="title"
+            var title = document.getElementById('title').value;
 
-       }
-    getURLData();
+            //Hent description fra input felt id="description"
+            var description = document.getElementById('description').value;
 
-    //Definer sendNewProductData
-    function sendNewProductData() {
-    
-    //Hent title fra input felt id="title"
-    var title = document.getElementById('title').value;
+            //Hent price fra input felt id="price"
+            var price = document.getElementById('price').value;
 
-    //Hent description fra input felt id="description"
-    var description = document.getElementById('description').value;
+            //Hent category fra input felt id="category"
+            var category = document.getElementById('category').value;
 
-    //Hent price fra input felt id="price"
-    var price = document.getElementById('price').value;
+            //Hent id fra intut felt id="id"
+            var id = document.getElementById('id').value;
 
-    //Hent category fra input felt id="category"
-    var category = document.getElementById('category').value;
+            //Hent userId fra localstorage
+            var userId = localStorage.getItem("userId");
 
-    // hent id fra intut felt id="id"
-    var id = document.getElementById('id').value;
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
 
-    //Lav et nyt request
-    const request = new XMLHttpRequest();
+            //Skriv hvilke endpoint det skal hente fra
+            const url = 'http://localhost:3000/api/products/edit?title='+title+'&description='+description+'&price='+price+'&category='+category+'&id='+id+'&userId='+userId;
 
-    //Skriv hvilke endpoint det skal hente fra
-    const url = 'http://localhost:3000/api/products/edit?title='+title+'&description='+description+'&price='+price+'&category='+category+'&id='+id;
-
-    //Åben forbindelsen til serveren ud fra vores url (endpoint)
-    request.open("GET", url);
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
 
 
-    //Send request til server
-    request.send(sendNewProductData);
+            //Send request til server
+            request.send(sendNewProductData);
 
-    //Giv klienten besked om at deres redigering af produktet er fuldført
-    request.onload = (e) => {
-        alert('Du har nu redigeret et produkt')
-    }
-    
-}
-   
+            //Produktet er redigeret og du bliver sendt tilbage på "Min Side"
+            request.onload = (e) => {
+                location.href = "users-profile.html";
+            };
+        };
     </script>
         
 
