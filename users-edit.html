@@ -30,19 +30,22 @@
     <script>
         //Vi laver en function med navnet getURLData
         function getURLData() {
-           // Her får vi fat i det pågældende query string value. Altså i dette tilfælde name som vi skal bruge for at kunne redigere i vores bruger
+            //Her henter vi "name" ud fra localstorage der passer på det pågældende id
             var name = localStorage.getItem('name');
             document.getElementById('name').value = name;
 
+            //Her henter vi "email" ud fra localstorage der passer på det pågældende id
             var email = localStorage.getItem('email');
             document.getElementById('email').value = email;
 
+            //Her henter vi "password" ud fra localstorage der passer på det pågældende id
             var password = localStorage.getItem('password');
             document.getElementById('password').value = password;
 
+            //Her henter vi "userId" ud fra localstorage 
             var userId = localStorage.getItem("userId");
-       
-        }
+        };
+        //Her kører jeg funktionen
         getURLData();
 
         //Definer sendNewUserData
@@ -56,6 +59,7 @@
             //Hent password fra input felt id="password
             var password = document.getElementById('password').value;
             
+            //Hent userId fra localstorage
             var userId = localStorage.getItem("userId");
              
             //Lav et nyt request
@@ -70,20 +74,20 @@
             //Send request til server
             request.send();
 
-            //Giv klienten besked om at deres redigering af produktet er fuldført
+            //Tilføj det redigerede til localstorage og send brugeren direkte tilbage på deres profil
             request.onload = (e) => {
-                alert('Du har nu redigeret din bruger')
                 localStorage.setItem("name", name);
                 localStorage.setItem("userId", userId);
                 localStorage.setItem("email", email);
                 localStorage.setItem("password", password);
-            }
-        }
+                location.href = "users-profile.html";
+            };
+        };
         
-
         //Slet bruger og log direkte ud
         function deleteUserWithId() {
 
+            //Henter userId fra localstorage
             var userId = localStorage.getItem("userId");
 
             //Lav et nyt request
@@ -98,15 +102,13 @@
             //Send request til server
             request.send();
             
+            //Når bruger sletter sin profil bliver de direkte viderestillet til startsiden uden længere at have en bruger og være logget ind
             request.onload = (e) => {
                 localStorage.removeItem("name");
                 localStorage.removeItem("userId");
                 location.href = 'products.html';
-            }
-            
-        }
-
-        
+            };
+        };
 
     </script>
     
