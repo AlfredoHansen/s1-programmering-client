@@ -23,7 +23,7 @@
         Opdater bruger
     </button>
     <br><br>
-    <button onclick="deleteUserWithThisId()">
+    <button onclick="deleteUserWithId()">
         Slet bruger
     </button>
 
@@ -48,37 +48,66 @@
         //Definer sendNewUserData
         function sendNewUserData() {
             //Hent name fra input felt id="name"
-             var name = document.getElementById('name').value;
+            var name = document.getElementById('name').value;
              
-             //Hent email fra input felt id="email"
-             var email = document.getElementById('email').value;
+            //Hent email fra input felt id="email"
+            var email = document.getElementById('email').value;
+             
+            //Hent password fra input felt id="password
+            var password = document.getElementById('password').value;
+            
+            var userId = localStorage.getItem("userId");
+             
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
+             
+            //Skriv hvilke endpoint det skal hente fra
+            const url = 'http://localhost:3000/api/users/edit?name='+name+'&email='+email+'&password='+password+'&userId='+userId;
+             
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+             
+            //Send request til server
+            request.send();
 
-    //Hent password fra input felt id="password"
-    var password = document.getElementById('password').value;
+            //Giv klienten besked om at deres redigering af produktet er fuldført
+            request.onload = (e) => {
+                alert('Du har nu redigeret din bruger')
+                localStorage.setItem("name", name);
+                localStorage.setItem("userId", userId);
+                localStorage.setItem("email", email);
+                localStorage.setItem("password", password);
+            }
+        }
+        
 
-    var userId = localStorage.getItem("userId");
+        //Slet bruger og log direkte ud
+        function deleteUserWithId() {
 
-    //Lav et nyt request
-    const request = new XMLHttpRequest();
+            var userId = localStorage.getItem("userId");
 
-    //Skriv hvilke endpoint det skal hente fra
-    const url = 'http://localhost:3000/api/users/edit?name='+name+'&email='+email+'&password='+password+'&userId='+userId;
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
+            
+            //Skriv hvilke endpoint det skal hente fra
+            const url = 'http://localhost:3000/api/users/delete?userId='+userId;
+            
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+            
+            //Send request til server
+            request.send();
+            
+            request.onload = (e) => {
+                localStorage.removeItem("name");
+                localStorage.removeItem("userId");
+                location.href = 'products.html';
+            }
+            
+        }
 
-    //Åben forbindelsen til serveren ud fra vores url (endpoint)
-    request.open("GET", url);
+        
 
-    //Send request til server
-    request.send();
-
-    //Giv klienten besked om at deres redigering af produktet er fuldført
-    request.onload = (e) => {
-        alert('Du har nu redigeret din bruger')
-        localStorage.setItem("name", name);
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("email", email);
-        localStorage.setItem("password", password);
-    }
-}
     </script>
     
 </body>
