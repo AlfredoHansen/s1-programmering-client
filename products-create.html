@@ -33,6 +33,7 @@
         <option>Teknologi</option>
     </select>
     <br /><br />
+    <input type="file" name="file"><br><br>
     <button onclick="sendNewProductData()">
         Opret produkt
     </button>
@@ -55,6 +56,10 @@
             //Hent userId fra localstorage
             var userId = localStorage.getItem("userId");
     
+            const files = document.querySelector('[name=file]').files;
+            const formData = new FormData();
+            formData.append('product', files[0]);
+            
             //Lav et nyt request
             const request = new XMLHttpRequest();
     
@@ -62,10 +67,10 @@
             const url = 'http://localhost:3000/api/products/create?title='+title+'&description='+description+'&price='+price+'&category='+category+'&userId='+userId;
     
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
-            request.open("GET", url);
+            request.open("POST", url);
     
             //Send request til server
-            request.send(sendNewProductData);
+            request.send(formData);
 
             //Produktet er gemt og du bliver viderestillet tilbage til "Min Side"
             request.onload = (e) => {
