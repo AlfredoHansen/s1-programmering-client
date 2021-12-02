@@ -64,14 +64,35 @@ Opdater din profil <a href="users-edit.html">her</a>
 
             //Loop over alle vores products fra vores response og se hvilke der matcher altså hvilke der skal vises på brugerens profil
             products.forEach(product => {
-                var productId = product.userId;
-                newListOfMyProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category+' - '+product.id+' - '+product.userId+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button> - <a href="products-edit.html?title='+product.title+'&id='+product.id+'&description='+product.description+'&price='+product.price+'&category='+product.category+'">Rediger produkt</a>';
+                var productId = product.id;
+                newListOfMyProcuctsHTML += '<li><img width="100px" src="http://localhost:3000'+product.productImage+'" /> - '+product.title+' - '+product.price+' - '+product.description+' - '+product.category+' - '+product.id+' - '+product.userId+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button> - <a href="products-edit.html?title='+product.title+'&id='+product.id+'&description='+product.description+'&price='+product.price+'&category='+product.category+'">Rediger produkt</a>';
             });
             document.getElementById("list-of-products").innerHTML = newListOfMyProcuctsHTML;
         };       
     };
     //Her kører jeg funktionen
     userProducts();
+
+    function deleteProductWithId(id) {
+        console.log(id);
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
+    
+            //Skriv hvilke endpoint det skal hente fra
+            const url = 'http://localhost:3000/api/products/delete?id='+id;
+
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+            
+            //Send request til server
+            request.send();
+
+            //produktet er slettet og du henter produkter
+            request.onload = (e) => {
+                userProducts();
+                console.log('hej');
+            };
+        };
 </script>
 </body>
 </html>
