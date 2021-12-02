@@ -71,7 +71,7 @@
                 //Loop over alle vores products fra vores response
                 products.forEach(product => {
                     var productId = product.id;
-                    newListOfProcuctsHTML += '<li>'+product.title+' - '+product.price+' - '+product.description+' - '+product.category;
+                    newListOfProcuctsHTML += '<li><img width="100px" src="http://localhost:3000'+product.productImage+'" /> - '+product.title+' - '+product.price+' - '+product.description+' - '+product.category+'</li>';
                 });
                 document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
             };
