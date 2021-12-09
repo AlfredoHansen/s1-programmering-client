@@ -7,17 +7,18 @@
     <title>Login</title>
 </head>
 <body>
+    <div class="dot"></div>
     <h1>Log ind</h1>
 
     Emailadresse: <br>
     <input name="email" id="email" style="width: 200px;" placeholder="Skriv din emailadresse her"/>
     <br /><br />
     Password: <br>
-    <input name="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br /><br />
-        <button onclick="sendNewLoginData()">
-            log ind
-        </button>
-    
+    <input name="password" type="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br /><br />
+    <button onclick="sendNewLoginData()">
+        log ind
+    </button>
+   
     <script>
         //Definer sendNewUserData
         function sendNewLoginData() {
@@ -49,12 +50,12 @@
                localStorage.setItem("email", user.email);
                localStorage.setItem("password", user.password);
                location.href = 'products.html';
-            //Hvis der ikke findes nogen user med samme email og login vil de få en alert om at der ikke findes en bruger
-            } else{
-               alert('Ingen bruger fundet');
-            };
-        };
-    };
-       </script>
+                //Hvis der ikke findes nogen user med samme email og login vil de få en alert om at der ikke findes en bruger
+                } else{
+                    alert('Ingen bruger fundet');
+                }
+            }
+        }
+    </script>
 </body>
 </html>

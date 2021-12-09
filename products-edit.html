@@ -47,9 +47,6 @@
 
             //Inde i funktionen bruger vi URLSearchParams som er en API metode hvorpå vi får adgang til 'values' i vores query strings. I vores tilfælde kan det for eksempel være id'et
             const params = new URLSearchParams(window.location.search)
-
-            // Her tester vi om vi får fat i vores value i vores params
-            console.log(params);
         
             // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "title" som vi skal bruge for at kunne redigere
             var title = params.get('title')
@@ -70,7 +67,7 @@
             // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "id" som vi skal bruge for at kunne redigere
             var id = params.get('id')
             document.getElementById('id').value = id;
-        };
+        }
         //Her kører vi funktionen
         getURLData();
 
@@ -111,8 +108,8 @@
             //Produktet er redigeret og du bliver sendt tilbage på "Min Side"
             request.onload = (e) => {
                 location.href = "users-profile.html";
-            };
-        };
+            }
+        }
     </script>
         
 

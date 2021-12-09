@@ -26,7 +26,7 @@
     <ul id="list-of-products">
     </ul>
 
-    kan logge ind eller oprette dig som bruger <a href="users-create.html">her</a><br>
+    Du kan logge ind eller oprette dig som bruger <a href="users-create.html">her</a><br>
 
     <a id="MyPageButton" href="users-profile.html">Min side</a>
 
@@ -74,8 +74,8 @@
                     newListOfProcuctsHTML += '<li><img width="100px" src="http://localhost:3000'+product.productImage+'" /> - '+product.title+' - '+product.price+' - '+product.description+' - '+product.category+'</li>';
                 });
                 document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
-            };
-        };
+            }
+        }
         //Her kører vi funktionen
         getProducts();
 
@@ -87,8 +87,8 @@
             }else{
                 document.getElementById("headline").innerHTML = 'Alle produkter';
                 document.getElementById("MyPageButton").style.visibility = "hidden";
-            };
-        };
+            }
+        }
         //Her kører jeg funktionen
         getUserData();
 
@@ -109,8 +109,8 @@
             //produktet er slettet og du henter produkter
             request.onload = (e) => {
                 getProducts();
-            };
-        };
+            }
+        }
     </script>
 
 </body>

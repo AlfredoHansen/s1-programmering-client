@@ -18,7 +18,7 @@
     <input name="email" id="email" style="width: 200px;" placeholder="Skriv din email her"/><br /><br />
 
     Dit password: <br>
-    <input password="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br><br>
+    <input password="password" type="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br><br>
 
     <input type="hidden" name="id" id="id">
 
@@ -42,10 +42,10 @@
             //Hent password fra input felt id="password"
             var password = document.getElementById('password').value;
 
-            //Lav et nyt request
+            //Lav et nyt XMLHTTPRequest
             const request = new XMLHttpRequest();
 
-            //Skriv hvilke endpoint det skal hente fra
+            //Definer URL
             const url = 'http://localhost:3000/api/users/create?name='+name+'&email='+email+'&password='+password;
 
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
@@ -57,8 +57,8 @@
             //Direkte link til login efter man er oprettet
             request.onload = (e) => {
                 location.href = "users-login.html";
-            };
-        ;}
+            }
+        }
         </script>
 </body>
 </html>

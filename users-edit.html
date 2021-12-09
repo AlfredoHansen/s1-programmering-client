@@ -16,7 +16,7 @@
     Din emailadresse:<br>
     <input name="email" id="email" style="width: 200px;" placeholder="Skriv din email her"/><br /><br />
     Dit password: <br>
-    <input password="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br><br>
+    <input password="password" type="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br><br>
     <input type="hidden" name="userId" id="userId">
 
     <button onclick="sendNewUserData()">
@@ -44,7 +44,7 @@
 
             //Her henter vi "userId" ud fra localstorage 
             var userId = localStorage.getItem("userId");
-        };
+        }
         //Her kører jeg funktionen
         getURLData();
 
@@ -81,8 +81,8 @@
                 localStorage.setItem("email", email);
                 localStorage.setItem("password", password);
                 location.href = "users-profile.html";
-            };
-        };
+            }
+        }
         
         //Slet bruger og log direkte ud
         function deleteUserWithId() {
@@ -106,10 +106,11 @@
             request.onload = (e) => {
                 localStorage.removeItem("name");
                 localStorage.removeItem("userId");
+                localStorage.removeItem("email");
+                localStorage.removeItem("password");
                 location.href = 'products.html';
-            };
-        };
-
+            }
+        }
     </script>
     
 </body>

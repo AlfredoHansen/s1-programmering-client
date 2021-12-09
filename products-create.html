@@ -33,6 +33,7 @@
         <option>Teknologi</option>
     </select>
     <br /><br />
+    Tilføj billede: <br>
     <input type="file" name="file"><br><br>
     <button onclick="sendNewProductData()">
         Opret produkt
@@ -75,7 +76,7 @@
             //Produktet er gemt og du bliver viderestillet tilbage til "Min Side"
             request.onload = (e) => {
                 location.href = "users-profile.html";
-            };
+            }
         }
         </script>
 </body>
