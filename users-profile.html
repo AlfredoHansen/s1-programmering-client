@@ -8,27 +8,38 @@
 </head>
 <body>
     <H1>Min Side</H1>
+    Opdater din profil <a href="users-edit.html">her</a>
+    <hr>
     Du kan se alle produkter der er tilsalg <a href="products.html">her</a> <br>
     Ellers kan du oprette et nyt produkt <a href="products-create.html">her</a> <br>
-
+    <hr>
     <h2>Mine produkter:</h2>
     <ul id="list-of-products">
     </ul>
-
+    <hr>
+    <h2>Produkter jeg følger:</h2>
+    <ul id="users_products_follows">
+    </ul>
+<div id="adminArea">
+    <hr>
+    <h2>Admin område</h2>
+    <h3>Liste over alle brugere</h3>
+    <ul id="all-users">
+    </ul>
+    <h3>Total antal annocer</h3>
+    <p id="amountOfProducts"></p>
+</div>
+<hr>
 <button onclick="LogOut()">
     Log ud
-</button> <br> <br>
-Opdater din profil <a href="users-edit.html">her</a>
+</button> 
 <script>
     //Laver en funktion til når man trykker på log ud knappen
     function LogOut() {
-
-        //fjerner navn fra localstorage
         localStorage.removeItem("name");
-
-        //fjerner userId fra localstorage
-        localStorage.removeItem("userId");
-
+        localStorage.removeItem("id");
+        localStorage.removeItem("is_gold");
+        localStorage.removeItem("usertype_id");
         localStorage.removeItem("email");
         localStorage.removeItem("password");
 
@@ -36,21 +47,36 @@ Opdater din profil <a href="users-edit.html">her</a>
         location.href = 'products.html';
     }
 
+    function getAmountOfProducts() {
+        //Lav et nyt request
+        const request = new XMLHttpRequest();
+
+        //Skriv hvilke endpoint det skal hente fra
+        var url = 'http://localhost:3000/api/products';
+
+        //Åben forbindelsen til serveren ud fra vores url (endpoint)
+        request.open("GET", url);
+
+        //Send request til server
+        request.send();
+
+        request.onload = (e) => {
+
+            var products = JSON.parse(request.response);
+            document.getElementById("amountOfProducts").innerHTML = products.length;
+        }
+    }
+
     function userProducts(){
 
         //Henter userId fra localStorage
-        var userId = localStorage.getItem("userId");
+        var userId = localStorage.getItem("id");
 
         //Lav et nyt request
         const request = new XMLHttpRequest();
 
         //Skriv hvilke endpoint det skal hente fra
-        var url = 'http://localhost:3000/api/users/profile';
-
-        //Hvis userId'et er det samme som pågældendes profil
-        if(userId) {
-            url = 'http://localhost:3000/api/users/profile?userId='+userId;
-        }
+        var url = 'http://localhost:3000/api/users/profile?userId='+userId;
 
         //Åben forbindelsen til serveren ud fra vores url (endpoint)
         request.open("GET", url);
@@ -68,13 +94,106 @@ Opdater din profil <a href="users-edit.html">her</a>
             //Loop over alle vores products fra vores response og se hvilke der matcher altså hvilke der skal vises på brugerens profil
             products.forEach(product => {
                 var productId = product.id;
-                newListOfMyProcuctsHTML += '<li><img width="100px" src="http://localhost:3000'+product.productImage+'" /> - '+product.title+' - '+product.price+' - '+product.description+' - '+product.category+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button> - <a href="products-edit.html?title='+product.title+'&id='+product.id+'&description='+product.description+'&price='+product.price+'&category='+product.category+'">Rediger produkt</a>';
+                newListOfMyProcuctsHTML += '<li><img width="100px" src="http://localhost:3000'+product.IMG+'" /> - '+product.name+' - '+product.price+' - '+product.description+' - <button id="'+productId+'" onClick="deleteProductWithId(this.id)">Slet produkt</button> - <a href="products-edit.html?name='+product.name+'&id='+product.id+'&description='+product.description+'&price='+product.price+'&color='+product.color+'&location='+product.location+'&category_id='+product.category_id+'">Rediger produkt</a>';
             });
             document.getElementById("list-of-products").innerHTML = newListOfMyProcuctsHTML;
         }     
     }
+
+    function userFollowsProducts() {
+
+        //Henter userId fra localStorage
+        var userId = localStorage.getItem("id");
+
+        //Lav et nyt request
+        const request = new XMLHttpRequest();
+
+        //Skriv hvilke endpoint det skal hente fra
+        var url = 'http://localhost:3000/api/users/products-follows?userId='+userId;
+
+        //Åben forbindelsen til serveren ud fra vores url (endpoint)
+        request.open("GET", url);
+
+        //Send request til server
+        request.send();
+
+        request.onload = (e) => {
+            //Tag response fra vores server, og lav det om til et Javascript object
+            var products = JSON.parse(request.response);
+
+            //Ny var
+            var newListOfMyProcuctsHTML = '';
+
+            //Loop over alle vores products fra vores response og se hvilke der matcher altså hvilke der skal vises på brugerens profil
+            products.forEach(product => {
+                var productId = product.id;
+                newListOfMyProcuctsHTML += '<li><img width="100px" src="http://localhost:3000'+product.IMG+'" /> - '+product.name+' - '+product.price+' - '+product.description+'';
+            });
+            document.getElementById("users_products_follows").innerHTML = newListOfMyProcuctsHTML;
+        }     
+    }
+
+    function showAdminArea() {
+
+        //Hvis brugeren ikke er admin (usertype_id == 2), så skal vi gemme admin området
+        if(localStorage.getItem("usertype_id") == 1) {
+            document.getElementById("adminArea").style.visibility = "hidden";
+        } else {
+            //Vi ved brugeren er admin, så nu skal vi hente en liste af alle brugere
+            
+            //Lav et nyt request
+        const request = new XMLHttpRequest();
+
+        //Skriv hvilke endpoint det skal hente fra
+        var url = 'http://localhost:3000/api/admin/users';
+
+        //Åben forbindelsen til serveren ud fra vores url (endpoint)
+        request.open("GET", url);
+
+        //Send request til server
+        request.send();
+
+        request.onload = (e) => {
+            //Tag response fra vores server, og lav det om til et Javascript object
+            var users = JSON.parse(request.response);
+
+            //Ny var
+            var listOfUsers = '';
+
+            //Loop over alle vores products fra vores response og se hvilke der matcher altså hvilke der skal vises på brugerens profil
+            users.forEach(user => {
+                var userId = user.id;
+                listOfUsers += '<li>Antal produkter: '+user.total_product_count+', Bruger info: '+user.name+' (email: '+user.email+') - <button id="'+userId+'" onClick="deleteUserWithId(this.id)">Slet bruger</button> - <a href="admin-edit-user.html?name='+user.name+'&email='+user.email+'&password='+user.password+'&user_id='+user.id+'&is_gold='+user.is_gold+'&usertype_id='+user.usertype_id+'">Rediger bruger</a></li>';
+            });
+            document.getElementById("all-users").innerHTML = listOfUsers;
+        }   
+        }
+    }
+
     //Her kører jeg funktionen
     userProducts();
+    showAdminArea();
+    getAmountOfProducts();
+    userFollowsProducts();
+
+    function deleteUserWithId(id) {
+        //Lav et nyt request
+        const request = new XMLHttpRequest();
+    
+        //Skriv hvilke endpoint det skal hente fra
+        const url = 'http://localhost:3000/api/admin/users/delete?id='+id;
+
+        //Åben forbindelsen til serveren ud fra vores url (endpoint)
+        request.open("GET", url);
+            
+        //Send request til server
+        request.send();
+
+        //produktet er slettet og du henter produkter
+        request.onload = (e) => {
+            showAdminArea();
+        }
+    }
 
     function deleteProductWithId(id) {
         //Lav et nyt request

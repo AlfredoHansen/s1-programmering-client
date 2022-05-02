@@ -12,7 +12,7 @@
     Du kommer tilbage til produkter <a href="products.html">her</a>
     <br><br>
     Produktetnavn: <br>
-    <input name="title" id="title" style="width: 200px;" placeholder="Skriv produktets navn her"/>
+    <input name="title" id="name" style="width: 200px;" placeholder="Skriv produktets navn her"/>
     <br /><br />
     Produktbeskrivelse: <br>
     <input name="description" id="description" style="width: 200px;" placeholder="Skriv beskrivelse af produktet her"/><br /><br />
@@ -20,19 +20,16 @@
     Produktpris: <br>
     <input name="price" id="price" style="width: 200px;" placeholder="Skriv produktets pris her"/><br /><br />
 
+    Produktfarve: <br>
+    <input name="color" id="color" style="width: 200px;" placeholder="Skriv produktets farve her"/><br /><br />
+
+    Produktslokation: <br>
+    <input name="location" id="location" style="width: 200px;" placeholder="Skriv produktets lokation her"/><br /><br />
+
     <input type="hidden" name="id" id="id">
 
     Produktkategori: <br>
-    <select id="category">
-        <option>Tøj</option>
-        <option>Møbler</option>
-        <option>Bildele</option>
-        <option>Køkkenudstyr</option>
-        <option>Haveudstyr</option>
-        <option>Legetøj</option>
-        <option>Belysning</option>
-        <option>Accessories</option>
-        <option>Teknologi</option>
+    <select id="category-list">
     </select>
     <br /><br />
 
@@ -49,8 +46,8 @@
             const params = new URLSearchParams(window.location.search)
         
             // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "title" som vi skal bruge for at kunne redigere
-            var title = params.get('title')
-            document.getElementById('title').value = title;
+            var name = params.get('name')
+            document.getElementById('name').value = name;
 
             // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "description" som vi skal bruge for at kunne redigere
             var description = params.get('description')
@@ -60,9 +57,11 @@
             var price = params.get('price')
             document.getElementById('price').value = price;
 
-            // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "category" som vi skal bruge for at kunne redigere
-            var category = params.get('category')
-            document.getElementById('category').value = category;
+            var location = params.get('location')
+            document.getElementById('location').value = location;
+
+            var color = params.get('color')
+            document.getElementById('color').value = color;
             
             // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "id" som vi skal bruge for at kunne redigere
             var id = params.get('id')
@@ -75,7 +74,7 @@
         function sendNewProductData() {
             
             //Hent title fra input felt id="title"
-            var title = document.getElementById('title').value;
+            var name = document.getElementById('name').value;
 
             //Hent description fra input felt id="description"
             var description = document.getElementById('description').value;
@@ -83,20 +82,23 @@
             //Hent price fra input felt id="price"
             var price = document.getElementById('price').value;
 
-            //Hent category fra input felt id="category"
-            var category = document.getElementById('category').value;
+            var category_id = document.getElementById('category-list').value;
+
+            var color = document.getElementById('color').value;
+
+            var location = document.getElementById('location').value;
 
             //Hent id fra intut felt id="id"
             var id = document.getElementById('id').value;
 
             //Hent userId fra localstorage
-            var userId = localStorage.getItem("userId");
+            var user_id = localStorage.getItem("id");
 
             //Lav et nyt request
             const request = new XMLHttpRequest();
 
             //Skriv hvilke endpoint det skal hente fra
-            const url = 'http://localhost:3000/api/products/edit?title='+title+'&description='+description+'&price='+price+'&category='+category+'&id='+id+'&userId='+userId;
+            const url = 'http://localhost:3000/api/products/edit?name='+name+'&description='+description+'&price='+price+'&color='+color+'&location='+location+'&category_id='+category_id+'&id='+id+'&user_id='+user_id;
 
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
             request.open("GET", url);
@@ -107,9 +109,48 @@
 
             //Produktet er redigeret og du bliver sendt tilbage på "Min Side"
             request.onload = (e) => {
-                location.href = "users-profile.html";
+                window.location.href = "users-profile.html";
             }
         }
+
+        function getCategories() {
+
+            const params = new URLSearchParams(window.location.search)
+            var category_id = params.get('category_id')
+
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
+
+            //Skriv hvilke endpoint det skal hente fra
+            var url = 'http://localhost:3000/api/categories';
+
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+
+            //Send request til server
+            request.send();
+
+            request.onload = (e) => {
+
+                //Tag response fra vores server, og lav det om til et Javascript object
+                var categories = JSON.parse(request.response);
+
+                var select = document.getElementById('category-list');
+
+                //Loop over alle vores products fra vores response
+                categories.forEach(category => {
+                    var opt = document.createElement('option');
+                    if(category.id == category_id) {
+                        opt.selected = true;
+                    }
+                    opt.value = category.id;
+                    opt.innerHTML = category.name;
+                    select.appendChild(opt);
+                });
+            }
+        }
+
+        getCategories();
     </script>
         
 

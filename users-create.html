@@ -42,11 +42,17 @@
             //Hent password fra input felt id="password"
             var password = document.getElementById('password').value;
 
+            //Tilføj denne senere. husk det kun er admin der skal kunne give det
+            //var is_gold = document.getElementById('is_gold').value
+
+            //skal man kunne få så skal man ikke selv kunne skrive ind
+            //var usertype_id = document.getElementById('usertype_id').value
+
             //Lav et nyt XMLHTTPRequest
             const request = new XMLHttpRequest();
 
             //Definer URL
-            const url = 'http://localhost:3000/api/users/create?name='+name+'&email='+email+'&password='+password;
+            const url = 'http://localhost:3000/api/users/create?name='+name+'&email='+email+'&password='+password+'&is_gold=false&usertype_id=1';
 
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
             request.open("GET", url);

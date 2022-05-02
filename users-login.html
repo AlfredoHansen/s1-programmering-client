@@ -43,13 +43,14 @@
 
             //Gem brugerens oplysninger i localstorage og send dem direkte til startsiden
             request.onload = (e) => {
-            if(JSON.parse(request.response).name){
-               var user = JSON.parse(request.response);
-               localStorage.setItem("name", user.name);
-               localStorage.setItem("userId", user.id);
-               localStorage.setItem("email", user.email);
-               localStorage.setItem("password", user.password);
-               location.href = 'products.html';
+                if(JSON.parse(request.response)[0].name){
+                var user = JSON.parse(request.response)[0];
+                localStorage.setItem("name", user.name);
+                localStorage.setItem("id", user.id);
+                localStorage.setItem("email", user.email);
+                localStorage.setItem("is_gold", user.is_gold);
+                localStorage.setItem("usertype_id", user.usertype_id);
+                location.href = 'products.html';
                 //Hvis der ikke findes nogen user med samme email og login vil de få en alert om at der ikke findes en bruger
                 } else{
                     alert('Ingen bruger fundet');

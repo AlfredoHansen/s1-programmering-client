@@ -38,12 +38,6 @@
             var email = localStorage.getItem('email');
             document.getElementById('email').value = email;
 
-            //Her henter vi "password" ud fra localstorage der passer på det pågældende id
-            var password = localStorage.getItem('password');
-            document.getElementById('password').value = password;
-
-            //Her henter vi "userId" ud fra localstorage 
-            var userId = localStorage.getItem("userId");
         }
         //Her kører jeg funktionen
         getURLData();
@@ -60,13 +54,13 @@
             var password = document.getElementById('password').value;
             
             //Hent userId fra localstorage
-            var userId = localStorage.getItem("userId");
+            var user_id = localStorage.getItem("id");
              
             //Lav et nyt request
             const request = new XMLHttpRequest();
              
             //Skriv hvilke endpoint det skal hente fra
-            const url = 'http://localhost:3000/api/users/edit?name='+name+'&email='+email+'&password='+password+'&userId='+userId;
+            const url = 'http://localhost:3000/api/users/edit?name='+name+'&email='+email+'&password='+password+'&user_id='+user_id;
              
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
             request.open("GET", url);
@@ -77,10 +71,9 @@
             //Tilføj det redigerede til localstorage og send brugeren direkte tilbage på deres profil
             request.onload = (e) => {
                 localStorage.setItem("name", name);
-                localStorage.setItem("userId", userId);
+                localStorage.setItem("id", user_id);
                 localStorage.setItem("email", email);
-                localStorage.setItem("password", password);
-                location.href = "users-profile.html";
+                window.location.href = "users-profile.html";
             }
         }
         
@@ -88,13 +81,13 @@
         function deleteUserWithId() {
 
             //Henter userId fra localstorage
-            var userId = localStorage.getItem("userId");
+            var user_id = localStorage.getItem("id");
 
             //Lav et nyt request
             const request = new XMLHttpRequest();
             
             //Skriv hvilke endpoint det skal hente fra
-            const url = 'http://localhost:3000/api/users/delete?userId='+userId;
+            const url = 'http://localhost:3000/api/users/delete?id='+user_id;
             
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
             request.open("GET", url);
@@ -104,11 +97,13 @@
             
             //Når bruger sletter sin profil bliver de direkte viderestillet til startsiden uden længere at have en bruger og være logget ind
             request.onload = (e) => {
-                localStorage.removeItem("name");
-                localStorage.removeItem("userId");
-                localStorage.removeItem("email");
-                localStorage.removeItem("password");
-                location.href = 'products.html';
+                // localStorage.removeItem("name");
+                // localStorage.removeItem("id");
+                // localStorage.removeItem("is_gold");
+                // localStorage.removeItem("usertype_id");
+                // localStorage.removeItem("email");
+                // localStorage.removeItem("password");
+                // window.location.href = 'products.html';
             }
         }
     </script>

@@ -11,48 +11,97 @@
     <h1 id="headline">Alle produkter</h1>
     <h2>Herunder finder du en liste af produkter</h2>
     <select id="category-list">
-        <option>Alle produkter</option>
-        <option>Tøj</option>
-        <option>Møbler</option>
-        <option>Bildele</option>
-        <option>Køkkenudstyr</option>
-        <option>Haveudstyr</option>
-        <option>Legetøj</option>
-        <option>Belysning</option>
-        <option>Accessories</option>
-        <option>Teknologi</option>
+        <option id="0">Alle produkter</option>
     </select>
+    <input placeholder="Søg på lokation" id="locationSearch" value="" type="text" />
+    <input placeholder="Søg på max pris" id="priceSearch" value="" type="text" />
+    <input placeholder="Søg på farve" id="colorSearch" value="" type="text" />
+    <button onclick="search()">Søg</button>
 
     <ul id="list-of-products">
     </ul>
 
-    Du kan logge ind eller oprette dig som bruger <a href="users-create.html">her</a><br>
+    <div id="CreateNewUser">
+        Du kan logge ind eller oprette dig som bruger <a href="users-create.html">her</a><br>
+    </div>
 
     <a id="MyPageButton" href="users-profile.html">Min side</a>
 
     <script>
-        //Hvis der ikke bliver valgt en kategori, så vis alle produkter
-        let category = document.getElementById('category-list');
-        category.addEventListener("change", () => {
-            if(category.value == 'Alle produkter') {
-                getProducts();
-            } else {
-                getProducts(category.value);
+
+        function search() {
+
+            var categorySearch = document.getElementById('category-list').value;
+            if(categorySearch == 'Alle produkter') {
+                categorySearch = null;
             }
-        });
+            var locationSearch = document.getElementById('locationSearch').value;
+
+            var priceSearch = document.getElementById('priceSearch').value;
+
+            var colorSearch = document.getElementById('colorSearch').value;
+
+            getProducts(categorySearch, locationSearch, priceSearch, colorSearch);
+
+        }
         
-        function getProducts(categoryValue) {
+        function getCategories() {
 
             //Lav et nyt request
             const request = new XMLHttpRequest();
 
             //Skriv hvilke endpoint det skal hente fra
-            var url = 'http://localhost:3000/api/products';
+            var url = 'http://localhost:3000/api/categories';
+
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+
+            //Send request til server
+            request.send();
+
+            request.onload = (e) => {
+
+                //Tag response fra vores server, og lav det om til et Javascript object
+                var categories = JSON.parse(request.response);
+
+                var select = document.getElementById('category-list');
+
+                //Loop over alle vores products fra vores response
+                categories.forEach(category => {
+                    var opt = document.createElement('option');
+                    opt.value = category.id;
+                    opt.innerHTML = category.name;
+                    select.appendChild(opt);
+                });
+            }
+        }
+
+        function getProducts(category, location, price, color) {
+
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
+
+            //Skriv hvilke endpoint det skal hente fra
+            var url = 'http://localhost:3000/api/products?search=true';
 
             //Hvilket det skal hente fra hvis man vælger en kategori
-            if(categoryValue) {
-                url = 'http://localhost:3000/api/products?category='+categoryValue;
+            if(category) {
+                url += '&category_id='+category;
             }
+
+            if(location) {
+                url += '&location='+location;
+            }
+
+            if(price) {
+                url += '&price='+price;
+            }
+
+            if(color) {
+                url += '&color='+color;
+            }
+
+            console.log(url);
 
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
             request.open("GET", url);
@@ -71,7 +120,7 @@
                 //Loop over alle vores products fra vores response
                 products.forEach(product => {
                     var productId = product.id;
-                    newListOfProcuctsHTML += '<li><img width="100px" src="http://localhost:3000'+product.productImage+'" /> - '+product.title+' - '+product.price+' - '+product.description+' - '+product.category+'</li>';
+                    newListOfProcuctsHTML += '<li><img width="100px" src="http://localhost:3000'+product.IMG+'" /> - '+product.name+' - '+product.price+' - '+product.description+' - <button id="'+productId+'" onClick="followProductWithId(this.id)">Følg dette produkt</button></li>';
                 });
                 document.getElementById("list-of-products").innerHTML = newListOfProcuctsHTML;
             }
@@ -79,11 +128,36 @@
         //Her kører vi funktionen
         getProducts();
 
+        getCategories();
+
+
+        function followProductWithId(id) {
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
+
+            var userId = localStorage.getItem('id');
+        
+            //Skriv hvilke endpoint det skal hente fra
+            const url = 'http://localhost:3000/api/products/follow?productId='+id+'&userId='+userId;
+
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+                
+            //Send request til server
+            request.send();
+
+            //produktet er slettet og du henter produkter
+            request.onload = (e) => {
+                alert('Du har nu fulgt produktet');
+            }
+        }
+
         //Hent navn ud fra localstorage, så når man logger ind bliver det mere personligt ved at tilføje det i overskriften.
         function getUserData() {
             var name = localStorage.getItem("name");
             if(name){
                 document.getElementById("headline").innerHTML = 'Velkommen til ' + name;
+                document.getElementById("CreateNewUser").style.visibility = "hidden";
             }else{
                 document.getElementById("headline").innerHTML = 'Alle produkter';
                 document.getElementById("MyPageButton").style.visibility = "hidden";

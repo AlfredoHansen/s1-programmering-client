@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opdater bruger</title>
+</head>
+<body>
+    <h1>Opdater bruger</h1>
+
+    Brugerens fulde navn: <br>
+    <input name="name" id="name" style="width: 200px;" placeholder="Skriv dit navn her"/><br /><br />
+    Brugerens emailadresse:<br>
+    <input name="email" id="email" style="width: 200px;" placeholder="Skriv din email her"/><br /><br />
+    Brugerens password: <br>
+    <input password="password" type="password" id="password" style="width: 200px;" placeholder="Skriv dit password her"/><br><br>
+    
+    <p>Er brugeren guld?</p>
+    <input type="radio" id="is_gold_yes" name="is_gold" value="1">
+    <label for="is_gold_yes">Ja</label><br>
+    <input type="radio" id="is_gold_no" name="is_gold" value="0">
+    <label for="is_gold_no">Nej</label><br>
+
+    <p>Opdater brugertype</p>
+    <select id="userType">
+        <option value="1">Normal bruger</option>
+        <option value="2">Admin bruger</option>
+    </select>
+    <input type="hidden" name="userId" id="userId">
+
+    <br /><br />
+
+    <button onclick="sendNewUserData()">
+        Opdater bruger
+    </button>
+    <br><br>
+
+    <script>
+        //Vi laver en function med navnet getURLData
+        function getURLData() {
+
+            const params = new URLSearchParams(window.location.search)
+        
+            // Her får vi fat i det pågældende query string value. Altså i dette tilfælde "title" som vi skal bruge for at kunne redigere
+            var name = params.get('name')
+            document.getElementById('name').value = name;
+            
+            var email = params.get('email')
+            document.getElementById('email').value = email;
+
+            var password = params.get('password')
+            document.getElementById('password').value = password;
+
+            var userId = params.get('user_id')
+            document.getElementById('userId').value = userId;
+
+            if(params.get('is_gold') == "true") {
+                document.getElementById("is_gold_yes").checked = true;
+            } else {
+                document.getElementById("is_gold_no").checked = true;
+            }
+
+            if(params.get('usertype_id') == 2) {
+                document.getElementById("userType").value = 2;
+            }
+
+        }
+        //Her kører jeg funktionen
+        getURLData();
+
+        //Definer sendNewUserData
+        function sendNewUserData() {
+            //Hent name fra input felt id="name"
+            var name = document.getElementById('name').value;
+             
+            //Hent email fra input felt id="email"
+            var email = document.getElementById('email').value;
+             
+            //Hent password fra input felt id="password
+            var password = document.getElementById('password').value;
+            
+            //Hent user_id fra input felt id="userId
+            var user_id = document.getElementById('userId').value;
+
+            var usertype_id = document.getElementById('userType').value;
+
+            var is_gold = "0";
+            if(document.getElementById("is_gold_yes").checked) {
+                is_gold = "1";
+            }
+             
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
+             
+            //Skriv hvilke endpoint det skal hente fra
+            const url = 'http://localhost:3000/api/admin/users/edit?name='+name+'&email='+email+'&password='+password+'&user_id='+user_id+'&is_gold='+is_gold+'&usertype_id='+usertype_id;
+             
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+             
+            //Send request til server
+            request.send();
+
+            //Tilføj det redigerede til localstorage og send brugeren direkte tilbage på deres profil
+            request.onload = (e) => {
+                window.location.href = "users-profile.html";
+            }
+        }
+        
+    </script>
+    
+</body>
+</html>

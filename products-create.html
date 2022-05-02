@@ -12,7 +12,7 @@
     Du kommer tilbage til produkter <a href="products.html">her</a>
     <br><br>
     Produktetnavn: <br>
-    <input name="title" id="title" style="width: 200px;" placeholder="Skriv produktets navn her"/>
+    <input name="name" id="name" style="width: 200px;" placeholder="Skriv produktets navn her"/>
     <br /><br />
     Produktbeskrivelse: <br>
     <input name="description" id="description" style="width: 200px;" placeholder="Skriv beskrivelse af produktet her"/><br /><br />
@@ -20,30 +20,32 @@
     Produktpris: <br>
     <input name="price" id="price" style="width: 200px;" placeholder="Skriv produktets pris her"/><br /><br />
 
-    Produktkategori: <br>
-    <select id="category">
-        <option>Tøj</option>
-        <option>Møbler</option>
-        <option>Bildele</option>
-        <option>Køkkenudstyr</option>
-        <option>Haveudstyr</option>
-        <option>Legetøj</option>
-        <option>Belysning</option>
-        <option>Accessories</option>
-        <option>Teknologi</option>
-    </select>
-    <br /><br />
+    Dato: <br>
+    <input name="date" id="date" type="datetime-local"/><br /><br />
+
+    Lokation: <br>
+    <input name="location" id="location" style="width: 200px;" placeholder="Skriv produktets lokation her"/><br /><br />
+
+    Farve: <br>
+    <input name="color" id="color" style="width: 200px;" placeholder="Skriv produktets farve her"/><br /><br />
+
     Tilføj billede: <br>
     <input type="file" name="file"><br><br>
+
+    Produktkategori: <br>
+    <select id="category-list">
+    </select>
+    <br /><br />
     <button onclick="sendNewProductData()">
         Opret produkt
     </button>
 
     <script>
+
         function sendNewProductData() {
     
             //Hent title fra input felt id="title"
-            var title = document.getElementById('title').value;
+            var name = document.getElementById('name').value;
     
             //Hent description fra input felt id="description"
             var description = document.getElementById('description').value;
@@ -52,10 +54,16 @@
             var price = document.getElementById('price').value;
 
             //Hent category fra input felt id="category"
-            var category = document.getElementById('category').value;
+            var category_id = document.getElementById('category-list').value;
+
+            var date = document.getElementById('date').value;
+
+            var location = document.getElementById('location').value;
+
+            var color = document.getElementById('color').value;
 
             //Hent userId fra localstorage
-            var userId = localStorage.getItem("userId");
+            var user_id = localStorage.getItem("id");
     
             const files = document.querySelector('[name=file]').files;
             const formData = new FormData();
@@ -65,19 +73,54 @@
             const request = new XMLHttpRequest();
     
             //Skriv hvilke endpoint det skal hente fra
-            const url = 'http://localhost:3000/api/products/create?title='+title+'&description='+description+'&price='+price+'&category='+category+'&userId='+userId;
+            const url = 'http://localhost:3000/api/products/create?name='+name+'&description='+description+'&price='+price+'&category_id='+category_id+'&user_id='+user_id+'&date='+date+'&location='+location+'&color='+color;
     
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
             request.open("POST", url);
     
             //Send request til server
             request.send(formData);
+            //request.send();
 
             //Produktet er gemt og du bliver viderestillet tilbage til "Min Side"
             request.onload = (e) => {
-                location.href = "users-profile.html";
+                window.location.href = "users-profile.html";
             }
         }
+
+        
+        function getCategories() {
+
+            //Lav et nyt request
+            const request = new XMLHttpRequest();
+
+            //Skriv hvilke endpoint det skal hente fra
+            var url = 'http://localhost:3000/api/categories';
+
+            //Åben forbindelsen til serveren ud fra vores url (endpoint)
+            request.open("GET", url);
+
+            //Send request til server
+            request.send();
+
+            request.onload = (e) => {
+
+                //Tag response fra vores server, og lav det om til et Javascript object
+                var categories = JSON.parse(request.response);
+
+                var select = document.getElementById('category-list');
+
+                //Loop over alle vores products fra vores response
+                categories.forEach(category => {
+                    var opt = document.createElement('option');
+                    opt.value = category.id;
+                    opt.innerHTML = category.name;
+                    select.appendChild(opt);
+                });
+            }
+        }
+
+        getCategories();
         </script>
 </body>
 </html>
