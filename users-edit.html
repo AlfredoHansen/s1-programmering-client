@@ -97,13 +97,13 @@
             
             //Når bruger sletter sin profil bliver de direkte viderestillet til startsiden uden længere at have en bruger og være logget ind
             request.onload = (e) => {
-                // localStorage.removeItem("name");
-                // localStorage.removeItem("id");
-                // localStorage.removeItem("is_gold");
-                // localStorage.removeItem("usertype_id");
-                // localStorage.removeItem("email");
-                // localStorage.removeItem("password");
-                // window.location.href = 'products.html';
+                localStorage.removeItem("name");
+                localStorage.removeItem("id");
+                localStorage.removeItem("is_gold");
+                localStorage.removeItem("usertype_id");
+                localStorage.removeItem("email");
+                localStorage.removeItem("password");
+                window.location.href = 'products.html';
             }
         }
     </script>

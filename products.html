@@ -101,8 +101,6 @@
                 url += '&color='+color;
             }
 
-            console.log(url);
-
             //Åben forbindelsen til serveren ud fra vores url (endpoint)
             request.open("GET", url);
 
@@ -127,7 +125,6 @@
         }
         //Her kører vi funktionen
         getProducts();
-
         getCategories();
 
 
@@ -185,6 +182,7 @@
                 getProducts();
             }
         }
+
     </script>
 
 </body>

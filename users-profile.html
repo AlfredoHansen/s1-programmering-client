@@ -34,7 +34,7 @@
     Log ud
 </button> 
 <script>
-    //Laver en funktion til når man trykker på log ud knappen
+    //Laver en funktion til når man trykker på log ud knappen, så alt data fra localstorage fjernes
     function LogOut() {
         localStorage.removeItem("name");
         localStorage.removeItem("id");
@@ -44,14 +44,15 @@
         localStorage.removeItem("password");
 
         //Viderestiller brugeren til startsiden uden længere at være logget ind
-        location.href = 'products.html';
+        window.location.href = 'products.html';
     }
 
+    //Oprertter getAmountOfProducts funktion
     function getAmountOfProducts() {
-        //Lav et nyt request
+        //Laver et nyt request
         const request = new XMLHttpRequest();
 
-        //Skriv hvilke endpoint det skal hente fra
+        //Hvilke endpoint det skal hente fra
         var url = 'http://localhost:3000/api/products';
 
         //Åben forbindelsen til serveren ud fra vores url (endpoint)
